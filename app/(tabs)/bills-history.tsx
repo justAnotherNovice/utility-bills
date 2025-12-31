@@ -9,7 +9,7 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>Index page</Text>
+      <Text>Bills history page</Text>
     </View>
   );
 }
