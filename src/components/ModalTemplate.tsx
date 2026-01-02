@@ -17,7 +17,7 @@ function ModalTemplate({ header, isVisible, onClose, ...rest }: Props) {
         <View style={styles.headerContainer}>
           <Text style={styles.headerText}>{header}</Text>
           <TouchableOpacity onPress={onClose}>
-            <MaterialIcons name="close" size={24} color="black" />
+            <MaterialIcons name="close" size={24} color="#fff" />
           </TouchableOpacity>
         </View>
         {rest.children}
@@ -29,7 +29,7 @@ function ModalTemplate({ header, isVisible, onClose, ...rest }: Props) {
 const styles = StyleSheet.create({
   modalContent: {
     width: "100%",
-    backgroundColor: "grey",
+    backgroundColor: "#f4f4f4ff",
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
     position: "absolute",
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     height: 50,
-    backgroundColor: "white",
+    backgroundColor: "grey",
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
     paddingHorizontal: 20,
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   headerText: {
-    color: "black",
+    color: "#fff",
     fontSize: 15,
   },
 });

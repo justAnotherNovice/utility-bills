@@ -1,33 +1,61 @@
 import { PropsWithChildren, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import useStore from "../store/useStore";
+import ActionButton from "./ActionButton";
 import TextInputField from "./TextInputField";
 
 type Props = PropsWithChildren<{
+  lastBill: any;
+  currentTabIndex: number;
   cancelForm: React.Dispatch<any>;
 }>;
 
-function UtilityServiceForm({ cancelForm }: Props) {
-  let [previous, setPrevious] = useState(1);
-  let [current, setCurrent] = useState<number>(1);
-  let [billData, setBillData] = useState({ sum: 0, count: 0 });
-  let [hiddenText, setHiddenText] = useState(false);
+function UtilityServiceForm({ lastBill, currentTabIndex, cancelForm }: Props) {
+  let [previous, setPrevious] = useState(lastBill?.info?.current ?? 1);
+  let [current, setCurrent] = useState<number>(0);
+  let count = current - previous;
+  let [billData, setBillData] = useState({
+    sum: lastBill?.rate ? lastBill.rate * count : count,
+    count,
+  });
+  const updateLastBills = useStore(({ updateLastBills }) => updateLastBills);
+  const saveLastBills = useStore(({ saveLastBills }) => saveLastBills);
+  const saveBill = useStore(({ saveBill }) => saveBill);
+  let [message, setMessage] = useState({ isVisible: false, text: "" });
+
+  function onChange(current: string, count: number, setValue: any) {
+    if (lastBill?.rate) {
+      setBillData({ sum: count * lastBill?.rate, count });
+      setValue(+current);
+    } else setMessage({ isVisible: true, text: "Потрібно встановити тариф" });
+  }
 
   function onChangeCurrent(currentValue: string) {
     let count = +currentValue - previous;
-    setBillData({ sum: count * 7.99, count });
-    setCurrent(+currentValue);
+    onChange(currentValue, count, setCurrent);
   }
 
   function onChangePrevious(currentValue: string) {
     let count = current - +currentValue;
-    setBillData({ sum: count * 7.99, count });
-    setPrevious(+currentValue);
+    onChange(currentValue, count, setPrevious);
   }
 
-  function saveBillData() {
+  async function saveBillData() {
     if (billData.sum > 0) {
-      console.log("success");
-    } else setHiddenText(true);
+      const resultData = {
+        info: {
+          previous,
+          current,
+          ...billData,
+          rate: lastBill.rate,
+          date: new Date().toLocaleDateString(),
+        },
+      };
+      updateLastBills(currentTabIndex, resultData);
+      await saveBill(currentTabIndex, resultData.info);
+      await saveLastBills();
+      cancelForm(false);
+    } else setMessage({ isVisible: true, text: "Сума повинна бути більше 0" });
   }
   return (
     <View>
@@ -44,21 +72,23 @@ function UtilityServiceForm({ cancelForm }: Props) {
       <View style={styles.result}>
         <Text style={styles.resultText}>Використано: {billData.count}</Text>
         <Text style={styles.resultText}>Сумма: {billData.sum}</Text>
+        <Text style={styles.resultText}>Тариф: {lastBill?.rate}</Text>
       </View>
       <View style={styles.controlsContainer}>
         <View style={styles.controls}>
-          <TouchableOpacity style={styles.controlButton} onPress={saveBillData}>
-            <Text style={styles.controlText}>Зберегти</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.controlButton}
-            onPress={() => cancelForm(false)}
-          >
-            <Text style={styles.controlText}>Скасувати</Text>
-          </TouchableOpacity>
+          <ActionButton
+            header="Зберегти"
+            customStyle={styles.controlButton}
+            handler={() => saveBillData()}
+          />
+          <ActionButton
+            header="Скасувати"
+            customStyle={styles.controlButton}
+            handler={() => cancelForm(false)}
+          />
         </View>
-        {hiddenText ? (
-          <Text style={styles.hiddenText}>Сума повинна бути більше 0</Text>
+        {message.isVisible ? (
+          <Text style={styles.hiddenText}>{message.text}</Text>
         ) : undefined}
       </View>
     </View>
@@ -66,26 +96,19 @@ function UtilityServiceForm({ cancelForm }: Props) {
 }
 
 const styles = StyleSheet.create({
+  controlsContainer: {
+    marginTop: 10,
+  },
   controls: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 10,
   },
-  controlsContainer: {},
   controlButton: {
-    paddingVertical: 15,
     width: "49%",
-    backgroundColor: "grey",
-    borderRadius: 15,
-  },
-  controlText: {
-    textAlign: "center",
-    color: "#fff",
-    fontSize: 15,
   },
   result: {
     justifyContent: "space-evenly",
-    height: 60,
+    height: 70,
   },
   hiddenText: {
     color: "red",

@@ -4,13 +4,14 @@ import { StyleSheet, Text, TextInput, View } from "react-native";
 type Props = PropsWithChildren<{
   header: string;
   value: number;
+  textStyle?: any;
   inputHandler: React.Dispatch<any>;
 }>;
 
-function TextInputField({ header, value, inputHandler }: Props) {
+function TextInputField({ header, value, textStyle, inputHandler }: Props) {
   return (
     <View style={styles.fieldContainer}>
-      <Text style={styles.header}>{header}</Text>
+      <Text style={[styles.header, textStyle]}>{header}</Text>
       <TextInput
         style={styles.textInput}
         value={value.toString()}

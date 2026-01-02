@@ -1,10 +1,26 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { PropsWithChildren, useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import LastUtilityBillData from "./LastUtilityBillData";
+import { useHeaderHeight } from "@react-navigation/elements";
+import { PropsWithChildren, useState } from "react";
+import {
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import useStore from "../store/useStore";
+import ActionButton from "./ActionButton";
+import UtilityBillData from "./UtilityBillData";
 import UtilityRateModal from "./UtilityRateModal";
 import UtilityServiceForm from "./UtilityServiceForm";
+
+type lastBill = {
+  rate: number;
+  previous: number;
+  current: number;
+  sum: number;
+  date: string;
+};
 
 type Props = PropsWithChildren<{
   tabs: {
@@ -17,55 +33,60 @@ type Props = PropsWithChildren<{
 
 function TabInfo({ tabs, isFormVisible, setIsFormVisible }: Props) {
   let [modalVisibility, setModalVisibility] = useState(false);
-  useEffect(() => {
-    async function getTabData() {
-      const data = await AsyncStorage.getItem(tabs.currentTabIndex.toString());
-    }
-    getTabData;
-  }, []);
+  const lastBills: any = useStore(({ lastBills }) => lastBills);
+  const bill: lastBill = lastBills[tabs.currentTabIndex] ?? {};
+  const height = useHeaderHeight();
 
   return (
-    <View>
+    <KeyboardAvoidingView
+      keyboardVerticalOffset={height + 90}
+      behavior="position"
+      style={{ flex: 1 }}
+    >
       <Text style={styles.header}>Останні показання</Text>
-      <LastUtilityBillData></LastUtilityBillData>
+      <UtilityBillData currentTabIndex={tabs.currentTabIndex}></UtilityBillData>
       {isFormVisible ? (
         <View>
           <Text style={styles.header}>Нові показання</Text>
-          <UtilityServiceForm cancelForm={setIsFormVisible} />
+          <UtilityServiceForm
+            currentTabIndex={tabs.currentTabIndex}
+            lastBill={bill}
+            cancelForm={setIsFormVisible}
+          />
         </View>
       ) : (
         <View style={styles.controls}>
+          <ActionButton
+            header="Додати показники"
+            customStyle={styles.addUtilityButton}
+            handler={() => setIsFormVisible(true)}
+          />
           <TouchableOpacity
-            style={styles.addUtilityButton}
-            onPress={() => setIsFormVisible(true)}
+            style={{
+              backgroundColor: "grey",
+              paddingVertical: 5,
+              paddingHorizontal: 10,
+              borderRadius: 15,
+            }}
+            onPress={() => setModalVisibility(true)}
           >
-            <Text style={styles.buttonText}>Додати показники</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setModalVisibility(true)}>
-            <Ionicons name="settings-outline" size={40} color="black" />
+            <Ionicons name="settings-outline" size={40} color="#fcf0f0ff" />
           </TouchableOpacity>
         </View>
       )}
       <UtilityRateModal
+        lastBill={bill}
         modalVisibility={modalVisibility}
+        currentTabIndex={tabs.currentTabIndex}
         closeModal={() => setModalVisibility(false)}
-        currentRate={8}
       ></UtilityRateModal>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   addUtilityButton: {
     width: "80%",
-    backgroundColor: "grey",
-    paddingVertical: 15,
-    borderRadius: 15,
-  },
-  buttonText: {
-    textAlign: "center",
-    fontSize: 14,
-    color: "#fff",
   },
   header: {
     marginTop: 30,
@@ -74,8 +95,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   controls: {
+    width: "100%",
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
     alignItems: "center",
     marginTop: 20,
   },

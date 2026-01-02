@@ -1,27 +1,32 @@
 import { PropsWithChildren, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import useStore from "../store/useStore";
+import ActionButton from "./ActionButton";
 import ModalTemplate from "./ModalTemplate";
 import TextInputField from "./TextInputField";
 
 type Props = PropsWithChildren<{
-  currentRate: number;
+  lastBill: any;
   modalVisibility: boolean;
+  currentTabIndex: number;
   closeModal: () => void;
 }>;
 
-function UtilityRateModal({ currentRate, modalVisibility, closeModal }: Props) {
-  let [rate, setRate] = useState(currentRate);
-  let [isChanged, setIsChanged] = useState(false);
+function UtilityRateModal({ lastBill, ...rest }: Props) {
+  let [rate, setRate] = useState(lastBill?.rate ?? 0);
+  const updateLastBills = useStore(({ updateLastBills }) => updateLastBills);
 
   function saveRateValue() {
-    setIsChanged(true);
+    updateLastBills(rest.currentTabIndex, { rate });
+    rest.closeModal();
   }
+
   return (
     <ModalTemplate
       header="Змінити тариф"
-      isVisible={modalVisibility}
+      isVisible={rest.modalVisibility}
       customStyles={styles.modal}
-      onClose={closeModal}
+      onClose={rest.closeModal}
     >
       <View style={styles.modaInner}>
         <TextInputField
@@ -29,15 +34,12 @@ function UtilityRateModal({ currentRate, modalVisibility, closeModal }: Props) {
           value={rate}
           inputHandler={setRate}
         />
-        <Text style={{ marginTop: 2, fontSize: 13, marginBottom: 15 }}>
-          Поточний тариф: {isChanged ? rate : currentRate}
-        </Text>
-        <TouchableOpacity
-          style={styles.addUtilityButton}
-          onPress={saveRateValue}
-        >
-          <Text style={styles.buttonText}>Зберегти</Text>
-        </TouchableOpacity>
+        <Text style={styles.smallText}>Поточний тариф: {lastBill?.rate}</Text>
+        <ActionButton
+          header="Зберегти"
+          customStyle={styles.button}
+          handler={saveRateValue}
+        />
       </View>
     </ModalTemplate>
   );
@@ -51,14 +53,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   headerText: {
-    color: "black",
-    fontSize: 15,
+    color: "#fff",
   },
-  addUtilityButton: {
+  smallText: {
+    marginTop: 2,
+    fontSize: 13,
+    marginBottom: 15,
+  },
+  button: {
     width: "100%",
-    backgroundColor: "#fff",
-    paddingVertical: 15,
-    borderRadius: 15,
   },
   buttonText: {
     textAlign: "center",

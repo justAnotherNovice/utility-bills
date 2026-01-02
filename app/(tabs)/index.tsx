@@ -1,14 +1,8 @@
 import TabInfo from "@/src/components/TabInfo";
 import TabMenu from "@/src/components/TabMenu";
-import { useHeaderHeight } from "@react-navigation/elements";
-import { useRef, useState } from "react";
-import {
-  KeyboardAvoidingView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import useStore from "@/src/store/useStore";
+import { useEffect, useRef, useState } from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function Index() {
   const [tabs, setTabs] = useState({
@@ -17,7 +11,14 @@ export default function Index() {
   });
   const tabStatesRef = useRef([false, false, false]);
   const [isFormVisible, setisFormVisible] = useState(false);
-  const height = useHeaderHeight();
+  const getLastBills = useStore(({ getLastBills }) => getLastBills);
+
+  useEffect(() => {
+    async function getData() {
+      await getLastBills();
+    }
+    getData();
+  }, []);
 
   function changeCurrentTab(tabIndex: number) {
     const states = [...tabStatesRef.current];
@@ -34,20 +35,14 @@ export default function Index() {
       <TabMenu tabs={tabs} changeCurrentTab={changeCurrentTab} />
       <ScrollView style={styles.content}>
         {tabs.currentTabIndex !== -1 ? (
-          <KeyboardAvoidingView
-            keyboardVerticalOffset={height + 90}
-            behavior="position"
-            style={{ flex: 1 }}
-          >
-            <TabInfo
-              tabs={tabs}
-              isFormVisible={isFormVisible}
-              setIsFormVisible={setisFormVisible}
-            />
-          </KeyboardAvoidingView>
+          <TabInfo
+            tabs={tabs}
+            isFormVisible={isFormVisible}
+            setIsFormVisible={setisFormVisible}
+          />
         ) : (
-          <View>
-            <Text>Оберіть послугу</Text>
+          <View style={{ marginTop: 50 }}>
+            <Text style={{ textAlign: "center" }}>Оберіть послугу</Text>
           </View>
         )}
       </ScrollView>

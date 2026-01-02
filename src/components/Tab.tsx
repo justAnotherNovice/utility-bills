@@ -17,7 +17,9 @@ function Tab({ title, tabIndex, isFocused, ...rest }: Props) {
     >
       <View style={styles.tabInner}>
         {rest.children}
-        <Text style={styles.tabText}>{title}</Text>
+        <Text style={[styles.text, isFocused ? styles.focusedText : ""]}>
+          {title}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -25,14 +27,20 @@ function Tab({ title, tabIndex, isFocused, ...rest }: Props) {
 
 const styles = StyleSheet.create({
   tab: {
-    width: "33%",
+    width: "34%",
     paddingHorizontal: 10,
     paddingVertical: 20,
+    borderRightWidth: 1.5,
+    borderRightColor: "grey",
+    borderLeftWidth: 1.5,
+    borderLeftColor: "grey",
+    borderBottomRightRadius: 30,
+    borderBottomLeftRadius: 30,
   },
   focusedTab: {
     backgroundColor: "grey",
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
   },
   tabInner: {
     width: "100%",
@@ -40,10 +48,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  tabText: {
+  text: {
     fontSize: 15,
     textAlign: "center",
     marginLeft: 5,
+  },
+  focusedText: {
+    color: "#fff",
   },
 });
 
