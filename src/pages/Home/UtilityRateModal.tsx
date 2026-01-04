@@ -1,9 +1,9 @@
+import ModalTemplate from "@/src/components/ModalTemplate";
+import useStore from "@/src/store/useStore";
+import ActionButton from "@/src/ui/ActionButton";
+import TextInputField from "@/src/ui/TextInputField";
 import { PropsWithChildren, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import useStore from "../store/useStore";
-import ActionButton from "./ActionButton";
-import ModalTemplate from "./ModalTemplate";
-import TextInputField from "./TextInputField";
 
 type Props = PropsWithChildren<{
   lastBill: any;
@@ -13,12 +13,15 @@ type Props = PropsWithChildren<{
 }>;
 
 function UtilityRateModal({ lastBill, ...rest }: Props) {
-  let [rate, setRate] = useState(lastBill?.rate ?? 0);
+  let [rate, setRate] = useState("");
   const updateLastBills = useStore(({ updateLastBills }) => updateLastBills);
 
   function saveRateValue() {
-    updateLastBills(rest.currentTabIndex, { rate });
-    rest.closeModal();
+    let decimalRate = parseFloat(rate);
+    if (decimalRate) {
+      updateLastBills(rest.currentTabIndex, { rate: decimalRate });
+      rest.closeModal();
+    }
   }
 
   return (
@@ -52,19 +55,15 @@ const styles = StyleSheet.create({
   modaInner: {
     marginHorizontal: 10,
   },
-  headerText: {
-    color: "#fff",
-  },
   smallText: {
     marginTop: 2,
     fontSize: 13,
     marginBottom: 15,
+    marginLeft: 5,
   },
   button: {
     width: "100%",
-  },
-  buttonText: {
-    textAlign: "center",
+    marginTop: 10,
   },
 });
 

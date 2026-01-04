@@ -1,22 +1,29 @@
 import { PropsWithChildren } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  KeyboardTypeOptions,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 type Props = PropsWithChildren<{
   header: string;
-  value: number;
+  value: string;
   textStyle?: any;
+  keyboard?: KeyboardTypeOptions;
   inputHandler: React.Dispatch<any>;
 }>;
 
-function TextInputField({ header, value, textStyle, inputHandler }: Props) {
+function TextInputField({ value, keyboard = "number-pad", ...rest }: Props) {
   return (
     <View style={styles.fieldContainer}>
-      <Text style={[styles.header, textStyle]}>{header}</Text>
+      <Text style={[styles.header, rest.textStyle]}>{rest.header}</Text>
       <TextInput
         style={styles.textInput}
-        value={value.toString()}
-        onChangeText={(value) => inputHandler(value)}
-        keyboardType="numeric"
+        value={value}
+        onChangeText={(value) => rest.inputHandler(value)}
+        keyboardType="number-pad"
       />
     </View>
   );
@@ -28,11 +35,12 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 15,
+    marginLeft: 5,
   },
   textInput: {
     backgroundColor: "#fff",
     padding: 10,
-    marginTop: 10,
+    marginTop: 5,
     borderWidth: 0.7,
     borderRadius: 15,
   },

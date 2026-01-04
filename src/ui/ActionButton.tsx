@@ -18,7 +18,7 @@ export default function ActionButton({ header, handler, customStyle }: Props) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "grey",
-    paddingVertical: 15,
+    paddingVertical: 10,
     borderRadius: 15,
   },
   text: {

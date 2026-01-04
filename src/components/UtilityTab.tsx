@@ -3,20 +3,21 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type Props = PropsWithChildren<{
   title: string;
+  icon: ReactNode;
   tabIndex: number;
-  isFocused: boolean;
+  activeTab: number;
   changeCurrentTab: (tabIndex: number) => void;
-  children: ReactNode;
 }>;
 
-function Tab({ title, tabIndex, isFocused, ...rest }: Props) {
+function Tab({ title, tabIndex, activeTab, ...rest }: Props) {
+  const isFocused = activeTab === tabIndex;
   return (
     <TouchableOpacity
       style={[styles.tab, isFocused ? styles.focusedTab : ""]}
       onPress={() => rest.changeCurrentTab(tabIndex)}
     >
       <View style={styles.tabInner}>
-        {rest.children}
+        {rest.icon}
         <Text style={[styles.text, isFocused ? styles.focusedText : ""]}>
           {title}
         </Text>
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: 15,
+    fontSize: 16,
     textAlign: "center",
     marginLeft: 5,
   },
