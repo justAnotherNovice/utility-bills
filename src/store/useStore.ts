@@ -2,6 +2,9 @@ import { create } from "zustand";
 import { getData, saveData } from "../utils/storage";
 
 type StoreState = {
+  history: {
+    tabIndex?: any[];
+  };
   lastBills: {
     tabIndex?: {
       rate: number;
@@ -18,10 +21,12 @@ type StoreState = {
   updateLastBills: (tabIndex: number, billData: any) => void;
   saveLastBills: () => Promise<void>;
   saveBill: (tabIndex: number, bill: any) => Promise<void>;
+  getHistory: (tabIndex: number) => Promise<void>;
 };
 
 const useStore = create<StoreState>((set, get) => ({
   lastBills: {},
+  history: {},
   getLastBills: async () => {
     set({ lastBills: await getData("lastBills", "{}") });
   },
@@ -39,9 +44,15 @@ const useStore = create<StoreState>((set, get) => ({
   },
   saveBill: async (tabIndex, bill) => {
     let key = tabIndex.toString();
-    let bills = await getData(key, "[]");
-    bills.push(bill);
-    await saveData(key, bills);
+    let year = new Date().getFullYear();
+    let utilityData = await getData(key, "{}");
+    let currentYearBills: any[] = utilityData[year] ?? [];
+    currentYearBills.push(bill);
+    await saveData(key, { ...utilityData, [year]: currentYearBills });
+  },
+  getHistory: async (tabIndex) => {
+    let history = await getData(tabIndex.toString(), "{}");
+    set({ history: { ...get().history, [tabIndex]: history } });
   },
 }));
 

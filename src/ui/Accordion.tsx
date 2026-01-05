@@ -1,5 +1,5 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { PropsWithChildren, ReactNode, useState } from "react";
+import { PropsWithChildren, ReactNode, useEffect, useState } from "react";
 import {
   LayoutAnimation,
   StyleSheet,
@@ -10,11 +10,16 @@ import {
 
 type Props = PropsWithChildren<{
   title: string;
+  isExpanded?: boolean;
   children: ReactNode;
 }>;
 
-export default function Accordion({ title, children }: Props) {
-  let [isOpen, setIsOpen] = useState(false);
+function Accordion({ title, children, isExpanded = false }: Props) {
+  let [isOpen, setIsOpen] = useState(isExpanded);
+
+  useEffect(() => {
+    setIsOpen(isExpanded);
+  }, [isExpanded]);
 
   function showContent() {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -22,21 +27,23 @@ export default function Accordion({ title, children }: Props) {
   }
 
   return (
-    <TouchableOpacity
-      style={[styles.item, !isOpen && { height: 50 }]}
-      onPress={showContent}
-      activeOpacity={1}
-    >
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>{title}</Text>
-        <MaterialIcons
-          name={isOpen ? "arrow-drop-down" : "arrow-right"}
-          size={38}
-          color="#fff"
-        />
-      </View>
+    <View>
+      <TouchableOpacity
+        style={[styles.item, !isOpen && { height: 50 }]}
+        onPress={showContent}
+        activeOpacity={1}
+      >
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>{title}</Text>
+          <MaterialIcons
+            name={isOpen ? "arrow-drop-down" : "arrow-right"}
+            size={38}
+            color="#fff"
+          />
+        </View>
+      </TouchableOpacity>
       {isOpen && children}
-    </TouchableOpacity>
+    </View>
   );
 }
 
@@ -61,3 +68,5 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+
+export default Accordion;
