@@ -1,19 +1,19 @@
 import { PropsWithChildren } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { utilityTemplates } from "../data/UtilityInfo";
 
 type Props = PropsWithChildren<{
   bill: any;
+  templates: any[];
   startFrom: number;
   activeTab: number;
 }>;
 
-function UtilityInformation({ bill, startFrom, activeTab }: Props) {
-  let formatters = Object.keys(utilityTemplates).slice(startFrom);
+function UtilityInformation({ bill, templates, startFrom, activeTab }: Props) {
+  let formatters = Object.keys(templates).slice(startFrom);
   return (
     <View style={[styles.content]}>
       {formatters.map((key: any, index) => {
-        let stringFormatter = utilityTemplates[key];
+        let stringFormatter = templates[key];
         return (
           <Text key={index}>{stringFormatter(bill?.[key], activeTab)}</Text>
         );

@@ -1,12 +1,12 @@
 import { PropsWithChildren } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { labels } from "../data/UtilityInfo";
 
 type Props = PropsWithChildren<{
+  labels: any[];
   startFrom: number;
 }>;
 
-export default function UtilityLabels({ startFrom }: Props) {
+export default function UtilityLabels({ labels, startFrom }: Props) {
   return (
     <View style={[styles.content]}>
       {labels.slice(startFrom).map((label: string, index) => {

@@ -41,18 +41,37 @@ const utilityIcons = [
 const utilityUnits = ["кВт-год", "куб. м.", "куб. м."];
 
 const labels = ["Попереднє", "Поточне", "Використано", "Тариф", "Сума"];
+const yearLables = [
+  "Витрачено",
+  "Середні витрати",
+  "Найбільше витрачено",
+  "Використано",
+  "Середнє використання",
+];
 
 const utilityTemplates: any = {
-  previous: format,
-  current: format,
-  count: format,
+  previous: showUtilityUnit,
+  current: showUtilityUnit,
+  count: showUtilityUnit,
   rate: (value: number, tabIndex: number) =>
     `${value} грн. (1 ${utilityUnits[tabIndex]})`,
-  sum: (value: number, tabIndex: number) => `${value} грн.`,
+  sum: showCurrency,
 };
 
-function format(value: number, tabIndex: number) {
+const yearTemplates: any = {
+  spent: showCurrency,
+  averageSpent: showCurrency,
+  maxSpent: showCurrency,
+  count: showUtilityUnit,
+  averageCount: showUtilityUnit,
+};
+
+function showUtilityUnit(value: number, tabIndex: number) {
   return `${value} ${utilityUnits[tabIndex]}`;
 }
 
-export { labels, utilityIcons, utilityTemplates };
+function showCurrency(value: number, tabIndex: number) {
+  return `${value} грн.`;
+}
+
+export { labels, utilityIcons, utilityTemplates, yearLables, yearTemplates };
