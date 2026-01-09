@@ -15,17 +15,19 @@ import HistoryControlsIcon from "./HistoryControlsIcon";
 
 type Props = PropsWithChildren<{
   activeTab: number;
-  selectedYear: number;
+  selectedYear: any[];
   history: any;
 }>;
 
 function HistoryTextDisplay({ activeTab, history, selectedYear }: Props) {
+  let currentYear = selectedYear[0];
+  let yearsBills = history[activeTab][currentYear];
   let [isAllExpanded, setIsAllExpanded] = useState(false);
   let [stats, setStats] = useState<any>({});
 
   useEffect(() => {
-    if (history[activeTab][selectedYear]) {
-      setStats(getExpenses(history[activeTab][selectedYear]));
+    if (yearsBills) {
+      setStats(getExpenses(yearsBills));
     }
   }, [activeTab]);
 
@@ -41,7 +43,7 @@ function HistoryTextDisplay({ activeTab, history, selectedYear }: Props) {
         />
       </View>
       <View style={styles.billsContainer}>
-        {history[activeTab][selectedYear].map((bill: any, index: number) => (
+        {yearsBills.map((bill: any, index: number) => (
           <Accordion key={index} title={bill?.date} isExpanded={isAllExpanded}>
             <View style={style.utilityInfo}>
               <UtilityLabels labels={labels} startFrom={0} />

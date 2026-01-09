@@ -43,12 +43,35 @@ const utilityUnits = ["кВт-год", "куб. м.", "куб. м."];
 const labels = ["Попереднє", "Поточне", "Використано", "Тариф", "Сума"];
 const yearLables = [
   "Витрачено",
-  "Середні витрати",
-  "Найбільше витрачено",
+  "Середнє",
+  "Найбільше",
   "Використано",
-  "Середнє використання",
+  "Середнє",
 ];
+/*
+ // setup to remove repeating unit labels on the bill history tab
+ // when comparing history for two years
 
+function billUnits(tabIndex: number) {
+  return [
+    utilityUnits[tabIndex],
+    utilityUnits[tabIndex],
+    utilityUnits[tabIndex],
+    `грн. (1 ${utilityUnits[tabIndex]})`,
+    "грн.",
+  ];
+}
+
+function yearUnits(tabIndex: number) {
+  return [
+    "грн.",
+    "грн.",
+    "грн.",
+    utilityUnits[tabIndex],
+    utilityUnits[tabIndex],
+  ];
+}
+*/
 const utilityTemplates: any = {
   previous: showUtilityUnit,
   current: showUtilityUnit,

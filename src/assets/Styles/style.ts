@@ -19,7 +19,6 @@ export default StyleSheet.create({
     marginLeft: 5,
     width: "100%",
     flexDirection: "row",
-    justifyContent: "space-between",
     height: 150,
     marginVertical: 15,
     paddingHorizontal: 5,

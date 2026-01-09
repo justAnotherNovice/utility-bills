@@ -31,7 +31,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="bills-history"
+        name="utility-history"
         options={{
           title: "Історія рахунків",
           tabBarIcon: ({ color, focused }) => (

@@ -24,7 +24,7 @@ function UtilityInformation({ bill, templates, startFrom, activeTab }: Props) {
 
 const styles = StyleSheet.create({
   content: {
-    width: "60%",
+    width: 160,
     height: "95%",
     justifyContent: "space-between",
   },

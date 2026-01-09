@@ -5,33 +5,29 @@ import HistoryControlsIcon from "./HistoryControlsIcon";
 
 type Props = PropsWithChildren<{
   displayText: boolean;
-  setDisplayText: React.Dispatch<any>;
-  setIsModalVisible: () => void;
+  changeDataView: () => void;
+  showModal: () => void;
 }>;
 
-function UtilityHistoryControls({
-  displayText,
-  setIsModalVisible,
-  setDisplayText,
-}: Props) {
+function HistoryControls({ displayText, showModal, ...rest }: Props) {
   return (
     <View style={styles.container}>
       <ActionButton
         header="Оберіть рік"
         customStyle={styles.button}
-        handler={setIsModalVisible}
+        handler={showModal}
       ></ActionButton>
       <HistoryControlsIcon
         icon={"document-text"}
         size={22}
         isActive={displayText}
-        onPress={() => setDisplayText(true)}
+        onPress={rest.changeDataView}
       />
       <HistoryControlsIcon
         icon={"stats-chart"}
         size={22}
         isActive={!displayText}
-        onPress={() => setDisplayText(false)}
+        onPress={rest.changeDataView}
       />
     </View>
   );
@@ -59,4 +55,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UtilityHistoryControls;
+export default HistoryControls;

@@ -18,7 +18,7 @@ export default function UtilityLabels({ labels, startFrom }: Props) {
 
 const styles = StyleSheet.create({
   content: {
-    width: "50%",
+    width: "35%",
     height: "95%",
     justifyContent: "space-between",
   },
