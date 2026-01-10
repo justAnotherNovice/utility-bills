@@ -8,7 +8,6 @@ import {
 import UtilityInformation from "@/src/ui/UtilityInformation";
 import UtilityLabels from "@/src/ui/UtilityLabels";
 import { getExpenses } from "@/src/utils/calculateUtilityExpense";
-import { formatDataAsBarChart } from "@/src/utils/chartDisplay";
 import { PropsWithChildren, useMemo, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import HistoryBarChart from "./HistoryBarChart";
@@ -35,9 +34,6 @@ function HistoryChartDisplay({ activeTab, history, ...rest }: Props) {
     () => yearsExpenses(),
     [history, rest.selectedYears]
   );
-  const barData = useMemo(() => {
-    return formatDataAsBarChart(yearsBills, yearInfo[0].averageSpent);
-  }, [history]);
 
   function yearsExpenses(): any[] {
     let year = getExpenses(yearsBills);
@@ -65,13 +61,12 @@ function HistoryChartDisplay({ activeTab, history, ...rest }: Props) {
           onPress={rest.setIsModalVisible}
         />
       </View>
-      <View style={styles.chartContainer}>
-        <HistoryBarChart
-          barData={barData}
-          averageSum={yearInfo[0].averageSpent}
-          setMonth={setSelectedMonth}
-        />
-      </View>
+      <HistoryBarChart
+        history={history}
+        selectedYears={rest.selectedYears}
+        averageSum={yearInfo[0].averageSpent}
+        setMonth={setSelectedMonth}
+      />
       <ScrollView style={{ flex: 1 }}>
         <View style={style.headerContainer}>
           <Text style={style.headerText}>{selectedMonth.title}</Text>
@@ -85,6 +80,14 @@ function HistoryChartDisplay({ activeTab, history, ...rest }: Props) {
               startFrom={0}
               activeTab={activeTab}
             />
+            {rest.selectedYears.length === 2 && (
+              <UtilityInformation
+                bill={history[rest.selectedYears[1]][selectedMonth.index]}
+                templates={utilityTemplates}
+                startFrom={0}
+                activeTab={activeTab}
+              />
+            )}
           </View>
         ) : (
           <Text style={styles.emptyMonth}>Відомості відсутні</Text>
@@ -128,10 +131,6 @@ function HistoryChartDisplay({ activeTab, history, ...rest }: Props) {
 }
 
 const styles = StyleSheet.create({
-  chartContainer: {
-    marginLeft: 10,
-    marginTop: 10,
-  },
   emptyMonth: {
     textAlign: "center",
     fontSize: 16,
