@@ -1,3 +1,4 @@
+import { labels, utilityTemplates } from "@/src/data/UtilityInfo";
 import UtilityInformation from "@/src/ui/UtilityInformation";
 import UtilityLabels from "@/src/ui/UtilityLabels";
 import { getDateWithTime } from "@/src/utils/formatDate";
@@ -76,12 +77,13 @@ function UtilityForm({ bill, currentTabIndex, cancelForm }: Props) {
         inputHandler={onChangeCurrent}
       />
       <View style={styles.utilityInfo}>
-        <UtilityLabels startFrom={2} />
+        <UtilityLabels labels={labels} startFrom={2} />
         <UtilityInformation
           bill={{
             ...billData,
             rate: bill?.rate,
           }}
+          templates={utilityTemplates}
           startFrom={2}
           activeTab={currentTabIndex}
         />

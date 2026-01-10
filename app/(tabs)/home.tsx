@@ -8,6 +8,8 @@ export default function Index() {
   const [isFormVisible, setisFormVisible] = useState(false);
   const [activeTab, setActiveTab] = useState(-1);
   const getLastBills = useStore(({ getLastBills }) => getLastBills);
+  const saveBill = useStore(({ saveBill }) => saveBill);
+  const lastBills: any = useStore(({ lastBills }) => lastBills);
 
   useEffect(() => {
     async function getData() {

@@ -1,9 +1,18 @@
+import { labels, utilityTemplates } from "@/src/data/UtilityInfo";
 import Accordion from "@/src/ui/Accordion";
 import UtilityInformation from "@/src/ui/UtilityInformation";
 import UtilityLabels from "@/src/ui/UtilityLabels";
+import showConfirmationDialog from "@/src/utils/showConfirmationDialog";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { PropsWithChildren, useState } from "react";
-import { KeyboardAvoidingView, StyleSheet, Text, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import useStore from "../../store/useStore";
 import UtilityForm from "./UtilityForm";
 import UtilityFormControls from "./UtilityFormControls";
@@ -15,11 +24,18 @@ type Props = PropsWithChildren<{
   setIsFormVisible: React.Dispatch<any>;
 }>;
 
+const confirmDialogText = "Ви впевнені що хочете видалити останні показники?";
+
 function UtilityTabInfo({ activeTab, isFormVisible, setIsFormVisible }: Props) {
   let [modalVisibility, setModalVisibility] = useState(false);
   const lastBills: any = useStore(({ lastBills }) => lastBills);
+  const deleteLastBill = useStore(({ deleteLastBill }) => deleteLastBill);
   const bill = lastBills[activeTab];
   const height = useHeaderHeight();
+
+  function deleteBill() {
+    showConfirmationDialog(confirmDialogText, () => deleteLastBill(activeTab));
+  }
 
   return (
     <KeyboardAvoidingView
@@ -31,16 +47,27 @@ function UtilityTabInfo({ activeTab, isFormVisible, setIsFormVisible }: Props) {
           <Accordion title="Останні показники">
             <View style={styles.container}>
               <View style={styles.utilityInfo}>
-                <UtilityLabels startFrom={0} />
+                <UtilityLabels labels={labels} startFrom={0} />
                 <UtilityInformation
                   bill={bill?.info}
+                  templates={utilityTemplates}
                   startFrom={0}
                   activeTab={activeTab}
                 />
+                <View style={styles.lastBillControls}>
+                  <TouchableOpacity style={styles.button}>
+                    <MaterialIcons
+                      name="edit-document"
+                      size={26}
+                      color="#fff"
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.button} onPress={deleteBill}>
+                    <MaterialIcons name="delete" size={26} color="#fff" />
+                  </TouchableOpacity>
+                </View>
               </View>
-              <View style={styles.dateField}>
-                <Text style={styles.date}>{bill?.info?.date}</Text>
-              </View>
+              <Text style={styles.date}>{bill?.info?.date}</Text>
             </View>
           </Accordion>
         </View>
@@ -79,14 +106,15 @@ const styles = StyleSheet.create({
   },
   utilityInfo: {
     marginLeft: 5,
-    width: "70%",
+    width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
     height: 150,
-    marginBottom: 25,
+    marginBottom: 10,
   },
   date: {
     alignSelf: "flex-end",
+    marginBottom: 5,
   },
   dateField: {
     position: "absolute",
@@ -96,6 +124,15 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 5,
     paddingTop: 35,
+  },
+  lastBillControls: {
+    height: "60%",
+    justifyContent: "space-between",
+  },
+  button: {
+    backgroundColor: "grey",
+    padding: 5,
+    borderRadius: 10,
   },
 });
 
