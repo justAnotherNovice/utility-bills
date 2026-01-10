@@ -53,7 +53,7 @@ function HistoryChartDisplay({ activeTab, history, ...rest }: Props) {
   return (
     <View style={{ flex: 1 }}>
       <View style={style.headerContainer}>
-        <Text style={style.headerText}>Витрати {rest.selectedYears[0]}</Text>
+        <Text style={style.headerText}>Витрати</Text>
         <HistoryControlsIcon
           icon={"git-compare"}
           isActive={false}

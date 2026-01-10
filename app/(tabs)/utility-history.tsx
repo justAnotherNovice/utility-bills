@@ -34,6 +34,10 @@ export default function Index() {
     setDisplayText(!displayText);
   }
 
+  function clearSelectedYears() {
+    setSelectedYear([]);
+  }
+
   return (
     <View style={styles.container}>
       <UtililityMenu
@@ -68,7 +72,9 @@ export default function Index() {
         <UtilityYearsModal
           isVisible={isModalVisible}
           history={history[activeTab]}
-          setSelectedYear={selectYear}
+          selectedYears={selectedYear}
+          selectYear={selectYear}
+          clearYears={clearSelectedYears}
           onClose={() => setIsModalVisible(false)}
         />
       )}

@@ -22,7 +22,7 @@ function HistoryBarChart({ history, averageSum, ...rest }: Props) {
         history[rest.selectedYears[1]]
       );
     }
-    return formatDataAsBarChart(history[rest.selectedYears[0]], averageSum);
+    return formatDataAsBarChart(history[rest.selectedYears[0]]);
   }, [history, rest.selectedYears]);
 
   function selectMonth(item: any) {
@@ -31,15 +31,24 @@ function HistoryBarChart({ history, averageSum, ...rest }: Props) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.legendContainer}>
+      <View
+        style={[
+          styles.legendContainer,
+          rest.selectedYears.length === 2 && {
+            justifyContent: "space-between",
+          },
+        ]}
+      >
         <View style={styles.legendItem}>
           <View style={[styles.box, { backgroundColor: "#177AD5" }]}></View>
           <Text>{rest.selectedYears[0]}</Text>
         </View>
-        <View style={styles.legendItem}>
-          <View style={[styles.box, { backgroundColor: "#CED5E1" }]}></View>
-          <Text>{rest.selectedYears[1]}</Text>
-        </View>
+        {rest.selectedYears.length === 2 && (
+          <View style={styles.legendItem}>
+            <View style={[styles.box, { backgroundColor: "#CED5E1" }]}></View>
+            <Text>{rest.selectedYears[1]}</Text>
+          </View>
+        )}
       </View>
       <BarChart
         barWidth={17}
@@ -67,7 +76,7 @@ const styles = StyleSheet.create({
   },
   legendContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     width: "50%",
     marginBottom: 20,
     marginLeft: "auto",
