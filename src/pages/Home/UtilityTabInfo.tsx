@@ -42,7 +42,7 @@ function UtilityTabInfo({ activeTab, isFormVisible, setIsFormVisible }: Props) {
       keyboardVerticalOffset={height + 90}
       behavior="position"
     >
-      {bill && (
+      {bill?.info && (
         <View style={{ marginTop: 30 }}>
           <Accordion title="Останні показники">
             <View style={styles.container}>

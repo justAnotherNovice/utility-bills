@@ -5,6 +5,7 @@ type StoreState = {
   history: {
     tabIndex?: any[];
   };
+  isUpdating: boolean;
   lastBills: {
     tabIndex?: {
       rate: number;
@@ -27,6 +28,7 @@ type StoreState = {
 
 const useStore = create<StoreState>((set, get) => ({
   lastBills: {},
+  isUpdating: false,
   history: {},
   getLastBills: async () => {
     set({ lastBills: await getData("lastBills", "{}") });
@@ -42,6 +44,7 @@ const useStore = create<StoreState>((set, get) => ({
   },
   saveLastBills: async () => {
     await saveData("lastBills", get().lastBills);
+    set({ isUpdating: true });
   },
   saveBill: async (tabIndex, bill) => {
     let key = tabIndex.toString();
@@ -53,7 +56,10 @@ const useStore = create<StoreState>((set, get) => ({
   },
   getHistory: async (tabIndex) => {
     let history = await getData(tabIndex.toString(), "{}");
-    set({ history: { ...get().history, [tabIndex]: history } });
+    set({
+      history: { ...get().history, [tabIndex]: history },
+      isUpdating: false,
+    });
   },
   deleteLastBill: async (tabIndex) => {
     let history = await getData(tabIndex.toString(), "{}");
@@ -62,11 +68,11 @@ const useStore = create<StoreState>((set, get) => ({
     yearBills.pop();
     let newLastBill = yearBills[yearBills.length - 1];
     get().updateLastBills(tabIndex, { info: newLastBill });
-    await get().saveLastBills();
     await saveData(tabIndex.toString(), {
       ...history,
       [currentYear]: yearBills,
     });
+    await get().saveLastBills();
   },
 }));
 

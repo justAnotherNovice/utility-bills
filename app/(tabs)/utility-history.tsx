@@ -14,15 +14,16 @@ export default function Index() {
   const history: any = useStore(({ history }) => history);
   let getHistory = useStore(({ getHistory }) => getHistory);
   let [isModalVisible, setIsModalVisible] = useState(false);
+  let isUpdating = useStore(({ isUpdating }) => isUpdating);
 
   useEffect(() => {
     async function getData() {
-      if (!history[activeTab] && activeTab !== -1) {
+      if (!history[activeTab] || (isUpdating && activeTab !== -1)) {
         await getHistory(activeTab);
       }
     }
     getData();
-  }, [activeTab]);
+  }, [activeTab, isUpdating]);
 
   function selectYear(year: number) {
     if (selectedYear.length !== 2) {

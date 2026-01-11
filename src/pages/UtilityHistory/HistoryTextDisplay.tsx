@@ -29,7 +29,7 @@ function HistoryTextDisplay({ activeTab, history, selectedYear }: Props) {
     if (yearsBills) {
       setStats(getExpenses(yearsBills));
     }
-  }, [activeTab]);
+  }, [activeTab, history]);
 
   return (
     <ScrollView style={styles.container}>

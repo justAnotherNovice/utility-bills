@@ -17,7 +17,7 @@ type Props = PropsWithChildren<{
 
 function UtilityForm({ bill, currentTabIndex, cancelForm }: Props) {
   let [previous, setPrevious] = useState<string>(
-    bill?.info.current.toString() ?? "0"
+    bill?.info?.current.toString() ?? "0"
   );
   let [current, setCurrent] = useState<string>("0");
   let [billData, setBillData] = useState({ count: 0, sum: 0 });
@@ -42,7 +42,7 @@ function UtilityForm({ bill, currentTabIndex, cancelForm }: Props) {
       let sum = roundNumber(count * bill?.rate);
       setBillData({ count, sum });
     } else setBillData({ count: 0, sum: 0 });
-    if (count) handler(currentValue);
+    if (count || currentValue.length === 0) handler(currentValue);
   }
 
   async function saveBillData() {
