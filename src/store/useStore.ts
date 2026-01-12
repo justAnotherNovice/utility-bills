@@ -24,6 +24,7 @@ type StoreState = {
   saveBill: (tabIndex: number, bill: any) => Promise<void>;
   getHistory: (tabIndex: number) => Promise<void>;
   deleteLastBill: (tabIndex: number) => Promise<void>;
+  updateLastBill: (tabIndex: number, bill: any) => Promise<void>;
 };
 
 const useStore = create<StoreState>((set, get) => ({
@@ -73,6 +74,15 @@ const useStore = create<StoreState>((set, get) => ({
       [currentYear]: yearBills,
     });
     await get().saveLastBills();
+  },
+  updateLastBill: async (tabIndex, bill) => {
+    let key = tabIndex.toString();
+    let year = new Date().getFullYear();
+    let utilityData = await getData(key, "{}");
+    let currentYearBills: any[] = utilityData[year] ?? [];
+    currentYearBills[currentYearBills.length - 1] = bill;
+    await saveData(key, { ...utilityData, [year]: currentYearBills });
+    set({ isUpdating: true });
   },
 }));
 

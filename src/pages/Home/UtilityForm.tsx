@@ -11,20 +11,33 @@ import TextInputField from "../../ui/TextInputField";
 
 type Props = PropsWithChildren<{
   bill: any;
-  currentTabIndex: number;
+  previousValue: number;
+  currentValue: number;
+  activeTab: number;
   cancelForm: React.Dispatch<any>;
+  saveBill: (bill: any) => Promise<void>;
+  isEdit: boolean;
 }>;
 
-function UtilityForm({ bill, currentTabIndex, cancelForm }: Props) {
-  let [previous, setPrevious] = useState<string>(
-    bill?.info?.current.toString() ?? "0"
-  );
-  let [current, setCurrent] = useState<string>("0");
-  let [billData, setBillData] = useState({ count: 0, sum: 0 });
+function UtilityForm({ bill, activeTab, cancelForm, ...rest }: Props) {
+  let [previous, setPrevious] = useState(rest.previousValue.toString() ?? "0");
+  let [current, setCurrent] = useState(rest.currentValue.toString());
+  let [billData, setBillData] = useState(initExpenses());
   const updateLastBills = useStore(({ updateLastBills }) => updateLastBills);
   const saveLastBills = useStore(({ saveLastBills }) => saveLastBills);
   const saveBill = useStore(({ saveBill }) => saveBill);
   let [message, setMessage] = useState({ isVisible: false, text: "" });
+
+  function initExpenses() {
+    if (rest.isEdit) {
+      let count = bill.info.current - bill.info.previous;
+      if (count > 0) {
+        let sum = roundNumber(count * bill?.rate);
+        return { count, sum };
+      }
+    }
+    return { count: 0, sum: 0 };
+  }
 
   function onChangeCurrent(currentValue: string) {
     let count = +currentValue - +previous;
@@ -32,7 +45,8 @@ function UtilityForm({ bill, currentTabIndex, cancelForm }: Props) {
   }
 
   function onChangePrevious(currentValue: string) {
-    if (bill?.info?.previous) return;
+    let previous = bill?.info?.previous;
+    if (previous && previous !== "0") return;
     let count = +current - +currentValue;
     onChange(count, currentValue, setPrevious);
   }
@@ -49,23 +63,23 @@ function UtilityForm({ bill, currentTabIndex, cancelForm }: Props) {
     if (billData.count > 0) {
       const resultData = {
         info: {
-          previous,
-          current,
-          ...billData,
+          previous: parseInt(previous),
+          current: parseInt(current),
+          sum: billData.sum,
+          count: billData.count,
           rate: bill.rate,
           date: getDateWithTime(),
         },
       };
-      updateLastBills(currentTabIndex, resultData);
-      await saveBill(currentTabIndex, resultData.info);
+      updateLastBills(activeTab, resultData);
       await saveLastBills();
+      await rest.saveBill(resultData.info);
       cancelForm(false);
     } else setMessage({ isVisible: true, text: "Сума повинна бути більше 0" });
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Нові показники</Text>
       <TextInputField
         header="Попереднє"
         value={previous}
@@ -85,7 +99,7 @@ function UtilityForm({ bill, currentTabIndex, cancelForm }: Props) {
           }}
           templates={utilityTemplates}
           startFrom={2}
-          activeTab={currentTabIndex}
+          activeTab={activeTab}
         />
       </View>
       <View style={styles.controlsContainer}>
@@ -112,7 +126,6 @@ function UtilityForm({ bill, currentTabIndex, cancelForm }: Props) {
 const styles = StyleSheet.create({
   container: {
     marginTop: 10,
-    paddingHorizontal: 5,
     flex: 1,
   },
   controlsContainer: {
@@ -130,24 +143,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: 5,
   },
-  header: {
-    marginTop: 20,
-    fontSize: 16,
-    paddingBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "grey",
-  },
-  test: {
-    height: 70,
-  },
   utilityInfo: {
-    width: "70%",
+    width: "90%",
     flexDirection: "row",
-    justifyContent: "space-between",
     height: 80,
     marginLeft: 5,
   },
-  resultText: {},
 });
 
 export default UtilityForm;

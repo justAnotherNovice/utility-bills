@@ -14,6 +14,7 @@ import {
   View,
 } from "react-native";
 import useStore from "../../store/useStore";
+import EditUtilityBillModal from "./EditUtilityBillModal";
 import UtilityForm from "./UtilityForm";
 import UtilityFormControls from "./UtilityFormControls";
 import UtilityRateModal from "./UtilityRateModal";
@@ -28,13 +29,19 @@ const confirmDialogText = "Ви впевнені що хочете видали�
 
 function UtilityTabInfo({ activeTab, isFormVisible, setIsFormVisible }: Props) {
   let [modalVisibility, setModalVisibility] = useState(false);
+  let [editBillModal, setEditBillVisibility] = useState(false);
   const lastBills: any = useStore(({ lastBills }) => lastBills);
   const deleteLastBill = useStore(({ deleteLastBill }) => deleteLastBill);
+  const saveBill = useStore(({ saveBill }) => saveBill);
   const bill = lastBills[activeTab];
   const height = useHeaderHeight();
 
   function deleteBill() {
     showConfirmationDialog(confirmDialogText, () => deleteLastBill(activeTab));
+  }
+
+  async function saveBillInfo(resultData: any) {
+    await saveBill(activeTab, resultData);
   }
 
   return (
@@ -55,7 +62,10 @@ function UtilityTabInfo({ activeTab, isFormVisible, setIsFormVisible }: Props) {
                   activeTab={activeTab}
                 />
                 <View style={styles.lastBillControls}>
-                  <TouchableOpacity style={styles.button}>
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => setEditBillVisibility(true)}
+                  >
                     <MaterialIcons
                       name="edit-document"
                       size={26}
@@ -72,12 +82,19 @@ function UtilityTabInfo({ activeTab, isFormVisible, setIsFormVisible }: Props) {
           </Accordion>
         </View>
       )}
-      {isFormVisible ? (
-        <UtilityForm
-          currentTabIndex={activeTab}
-          bill={bill}
-          cancelForm={setIsFormVisible}
-        />
+      {bill && isFormVisible ? (
+        <View>
+          <Text style={styles.header}>Нові показники</Text>
+          <UtilityForm
+            bill={bill}
+            activeTab={activeTab}
+            cancelForm={setIsFormVisible}
+            previousValue={bill?.info?.current}
+            currentValue={0}
+            saveBill={saveBillInfo}
+            isEdit={false}
+          />
+        </View>
       ) : (
         <UtilityFormControls
           showform={() => setIsFormVisible(true)}
@@ -92,6 +109,12 @@ function UtilityTabInfo({ activeTab, isFormVisible, setIsFormVisible }: Props) {
           closeModal={() => setModalVisibility(false)}
         ></UtilityRateModal>
       )}
+      <EditUtilityBillModal
+        bill={bill}
+        activeTab={activeTab}
+        isVisible={editBillModal}
+        onClose={() => setEditBillVisibility(false)}
+      />
     </KeyboardAvoidingView>
   );
 }
@@ -133,6 +156,13 @@ const styles = StyleSheet.create({
     backgroundColor: "grey",
     padding: 5,
     borderRadius: 10,
+  },
+  header: {
+    marginTop: 20,
+    fontSize: 16,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "grey",
   },
 });
 
