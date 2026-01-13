@@ -82,7 +82,7 @@ function UtilityTabInfo({ activeTab, isFormVisible, setIsFormVisible }: Props) {
           </Accordion>
         </View>
       )}
-      {bill && isFormVisible ? (
+      {isFormVisible ? (
         <View>
           <Text style={styles.header}>Нові показники</Text>
           <UtilityForm
@@ -109,12 +109,14 @@ function UtilityTabInfo({ activeTab, isFormVisible, setIsFormVisible }: Props) {
           closeModal={() => setModalVisibility(false)}
         ></UtilityRateModal>
       )}
-      <EditUtilityBillModal
-        bill={bill}
-        activeTab={activeTab}
-        isVisible={editBillModal}
-        onClose={() => setEditBillVisibility(false)}
-      />
+      {editBillModal && (
+        <EditUtilityBillModal
+          bill={bill}
+          activeTab={activeTab}
+          isVisible={editBillModal}
+          onClose={() => setEditBillVisibility(false)}
+        />
+      )}
     </KeyboardAvoidingView>
   );
 }

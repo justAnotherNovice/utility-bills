@@ -20,12 +20,12 @@ type Props = PropsWithChildren<{
 }>;
 
 function UtilityForm({ bill, activeTab, cancelForm, ...rest }: Props) {
-  let [previous, setPrevious] = useState(rest.previousValue.toString() ?? "0");
+  let previousValue = rest.previousValue ? rest.previousValue.toString() : "0";
+  let [previous, setPrevious] = useState(previousValue);
   let [current, setCurrent] = useState(rest.currentValue.toString());
   let [billData, setBillData] = useState(initExpenses());
   const updateLastBills = useStore(({ updateLastBills }) => updateLastBills);
   const saveLastBills = useStore(({ saveLastBills }) => saveLastBills);
-  const saveBill = useStore(({ saveBill }) => saveBill);
   let [message, setMessage] = useState({ isVisible: false, text: "" });
 
   function initExpenses() {
@@ -92,15 +92,17 @@ function UtilityForm({ bill, activeTab, cancelForm, ...rest }: Props) {
       />
       <View style={styles.utilityInfo}>
         <UtilityLabels labels={labels} startFrom={2} />
-        <UtilityInformation
-          bill={{
-            ...billData,
-            rate: bill?.rate,
-          }}
-          templates={utilityTemplates}
-          startFrom={2}
-          activeTab={activeTab}
-        />
+        {bill?.rate && (
+          <UtilityInformation
+            bill={{
+              ...billData,
+              rate: bill?.rate,
+            }}
+            templates={utilityTemplates}
+            startFrom={2}
+            activeTab={activeTab}
+          />
+        )}
       </View>
       <View style={styles.controlsContainer}>
         <View style={styles.controls}>
