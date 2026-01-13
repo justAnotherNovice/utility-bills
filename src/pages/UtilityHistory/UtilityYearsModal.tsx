@@ -3,6 +3,7 @@ import ActionButton from "@/src/ui/ActionButton";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { PropsWithChildren } from "react";
 import {
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   modal: {
-    height: "100%",
+    height: Platform.OS === "ios" ? "95%" : "100%",
   },
   modalInner: {
     marginTop: 15,
