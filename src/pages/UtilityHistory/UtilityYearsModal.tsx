@@ -3,7 +3,6 @@ import ActionButton from "@/src/ui/ActionButton";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { PropsWithChildren } from "react";
 import {
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -25,7 +24,6 @@ function UtilityYearsModal({ isVisible, history, ...rest }: Props) {
     <ModalTemplate
       header="Оберіть рік"
       isVisible={isVisible}
-      customStyles={styles.modal}
       onClose={rest.onClose}
     >
       <View style={styles.container}>
@@ -68,9 +66,6 @@ function UtilityYearsModal({ isVisible, history, ...rest }: Props) {
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 10,
-  },
-  modal: {
-    height: Platform.OS === "ios" ? "95%" : "100%",
   },
   modalInner: {
     marginTop: 15,

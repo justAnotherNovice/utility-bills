@@ -1,7 +1,7 @@
 import ModalTemplate from "@/src/components/ModalTemplate";
 import useStore from "@/src/store/useStore";
 import { PropsWithChildren } from "react";
-import { Platform, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import UtilityForm from "./UtilityForm";
 
 type Props = PropsWithChildren<{
@@ -22,7 +22,6 @@ function EditUtilityBillModal({ bill, activeTab, isVisible, onClose }: Props) {
     <ModalTemplate
       header="Змінити показники"
       isVisible={isVisible}
-      customStyles={styles.modal}
       onClose={onClose}
     >
       <View style={styles.modalInner}>
@@ -41,9 +40,6 @@ function EditUtilityBillModal({ bill, activeTab, isVisible, onClose }: Props) {
 }
 
 const styles = StyleSheet.create({
-  modal: {
-    height: Platform.OS === "ios" ? "95%" : "100%",
-  },
   modalInner: {
     flex: 1,
     paddingHorizontal: 15,

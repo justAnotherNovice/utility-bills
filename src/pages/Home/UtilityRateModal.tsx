@@ -28,7 +28,6 @@ function UtilityRateModal({ lastBill, ...rest }: Props) {
     <ModalTemplate
       header="Змінити тариф"
       isVisible={rest.modalVisibility}
-      customStyles={styles.modal}
       onClose={rest.closeModal}
     >
       <View style={styles.modaInner}>
@@ -49,9 +48,6 @@ function UtilityRateModal({ lastBill, ...rest }: Props) {
 }
 
 const styles = StyleSheet.create({
-  modal: {
-    height: "30%",
-  },
   modaInner: {
     marginHorizontal: 10,
   },
