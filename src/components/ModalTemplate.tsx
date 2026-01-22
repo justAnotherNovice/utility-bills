@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import font from "../assets/Styles/font";
 
 type Props = PropsWithChildren<{
   header: string;
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     color: "#fff",
-    fontSize: 15,
+    fontSize: font.section.fontSize,
   },
 });
 

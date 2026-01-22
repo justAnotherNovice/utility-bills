@@ -1,5 +1,6 @@
 import { PropsWithChildren, ReactNode } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import font from "../assets/Styles/font";
 
 type Props = PropsWithChildren<{
   title: string;
@@ -32,9 +33,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 20,
     borderRightWidth: 1.5,
-    borderRightColor: "grey",
     borderLeftWidth: 1.5,
-    borderLeftColor: "grey",
+    borderColor: "grey",
     borderBottomRightRadius: 30,
     borderBottomLeftRadius: 30,
   },
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: 16,
+    fontSize: font.section.fontSize,
     textAlign: "center",
     marginLeft: 5,
   },

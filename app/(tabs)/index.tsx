@@ -2,7 +2,7 @@ import TabMenu from "@/src/layouts/UtilityMenu";
 import UtilityTabInfo from "@/src/pages/Home/UtilityTabInfo";
 import useStore from "@/src/store/useStore";
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function Index() {
   const [isFormVisible, setisFormVisible] = useState(false);
@@ -62,6 +62,6 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: "center",
-    fontSize: 18,
+    fontSize: Platform.OS === "android" ? 18 : 21,
   },
 });

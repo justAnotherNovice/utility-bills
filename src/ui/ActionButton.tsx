@@ -1,5 +1,6 @@
 import { PropsWithChildren } from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import font from "../assets/Styles/font";
 
 type Props = PropsWithChildren<{
   header: string;
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: "center",
-    fontSize: 15,
+    fontSize: font.header.fontSize,
     color: "#fff",
   },
 });

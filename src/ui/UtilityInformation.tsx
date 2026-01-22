@@ -1,5 +1,6 @@
 import { PropsWithChildren } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import font from "../assets/Styles/font";
 
 type Props = PropsWithChildren<{
   bill: any;
@@ -15,7 +16,9 @@ function UtilityInformation({ bill, templates, startFrom, activeTab }: Props) {
       {formatters.map((key: any, index) => {
         let stringFormatter = templates[key];
         return (
-          <Text key={index}>{stringFormatter(bill?.[key], activeTab)}</Text>
+          <Text style={font.text} key={index}>
+            {stringFormatter(bill?.[key], activeTab)}
+          </Text>
         );
       })}
     </View>

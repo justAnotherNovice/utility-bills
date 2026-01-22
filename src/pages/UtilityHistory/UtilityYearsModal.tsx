@@ -1,3 +1,4 @@
+import font from "@/src/assets/Styles/font";
 import ModalTemplate from "@/src/components/ModalTemplate";
 import ActionButton from "@/src/ui/ActionButton";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     textAlign: "center",
-    fontSize: 17,
+    fontSize: font.header.fontSize,
   },
   yearsControls: {
     flexDirection: "row",

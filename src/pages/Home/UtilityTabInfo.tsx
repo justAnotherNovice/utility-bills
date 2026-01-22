@@ -1,3 +1,4 @@
+import font from "@/src/assets/Styles/font";
 import { labels, utilityTemplates } from "@/src/data/UtilityInfo";
 import Accordion from "@/src/ui/Accordion";
 import UtilityInformation from "@/src/ui/UtilityInformation";
@@ -138,17 +139,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   date: {
+    fontSize: font.text.fontSize,
     alignSelf: "flex-end",
     marginBottom: 5,
-  },
-  dateField: {
-    position: "absolute",
-    width: "100%",
-    borderTopWidth: 1,
-    borderTopColor: "grey",
-    bottom: 0,
-    right: 5,
-    paddingTop: 35,
   },
   lastBillControls: {
     height: "60%",
@@ -161,7 +154,7 @@ const styles = StyleSheet.create({
   },
   header: {
     marginTop: 20,
-    fontSize: 16,
+    fontSize: font.section.fontSize,
     paddingBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: "grey",

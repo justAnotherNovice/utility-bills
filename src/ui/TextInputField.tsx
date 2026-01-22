@@ -6,11 +6,11 @@ import {
   TextInput,
   View,
 } from "react-native";
+import font from "../assets/Styles/font";
 
 type Props = PropsWithChildren<{
   header: string;
   value: string;
-  textStyle?: any;
   keyboard?: KeyboardTypeOptions;
   inputHandler: React.Dispatch<any>;
 }>;
@@ -18,7 +18,7 @@ type Props = PropsWithChildren<{
 function TextInputField({ value, keyboard = "number-pad", ...rest }: Props) {
   return (
     <View style={styles.fieldContainer}>
-      <Text style={[styles.header, rest.textStyle]}>{rest.header}</Text>
+      <Text style={styles.header}>{rest.header}</Text>
       <TextInput
         style={styles.textInput}
         value={value}
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   header: {
-    fontSize: 15,
+    fontSize: font.header.fontSize,
     marginLeft: 5,
   },
   textInput: {

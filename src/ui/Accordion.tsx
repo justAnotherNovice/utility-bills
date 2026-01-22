@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import font from "../assets/Styles/font";
 
 type Props = PropsWithChildren<{
   title: string;
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
   title: {
     marginLeft: 15,
     color: "#fff",
-    fontSize: 16,
+    fontSize: font.section.fontSize,
   },
   item: {
     width: "100%",

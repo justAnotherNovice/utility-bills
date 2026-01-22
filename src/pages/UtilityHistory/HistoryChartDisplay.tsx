@@ -1,3 +1,4 @@
+import font from "@/src/assets/Styles/font";
 import style from "@/src/assets/Styles/style";
 import {
   labels,
@@ -32,7 +33,7 @@ function HistoryChartDisplay({ activeTab, history, ...rest }: Props) {
 
   const yearInfo = useMemo(
     () => yearsExpenses(),
-    [history, rest.selectedYears]
+    [history, rest.selectedYears],
   );
 
   function yearsExpenses(): any[] {
@@ -133,7 +134,7 @@ function HistoryChartDisplay({ activeTab, history, ...rest }: Props) {
 const styles = StyleSheet.create({
   emptyMonth: {
     textAlign: "center",
-    fontSize: 16,
+    fontSize: font.header.fontSize,
     borderColor: "grey",
     borderWidth: 2,
     borderCurve: "continuous",
