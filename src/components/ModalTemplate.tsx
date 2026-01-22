@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import font from "../assets/Styles/font";
 
 type Props = PropsWithChildren<{
@@ -20,15 +21,17 @@ type Props = PropsWithChildren<{
 function ModalTemplate({ header, isVisible, onClose, ...rest }: Props) {
   return (
     <Modal animationType="slide" transparent={true} visible={isVisible}>
-      <View style={styles.modalContent}>
-        <View style={styles.headerContainer}>
-          <Text style={styles.headerText}>{header}</Text>
-          <TouchableOpacity onPress={onClose}>
-            <MaterialIcons name="close" size={24} color="#fff" />
-          </TouchableOpacity>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.modalContent}>
+          <View style={styles.headerContainer}>
+            <Text style={styles.headerText}>{header}</Text>
+            <TouchableOpacity onPress={onClose}>
+              <MaterialIcons name="close" size={24} color="#fff" />
+            </TouchableOpacity>
+          </View>
+          {rest.children}
         </View>
-        {rest.children}
-      </View>
+      </SafeAreaView>
     </Modal>
   );
 }
