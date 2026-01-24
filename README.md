@@ -1,6 +1,12 @@
-# Welcome to your Expo app 👋
+# utility-bills
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This is a simple app to keep track of your utility bills' history. Using this application, you can add utility indicators for the current month for each utility to view the final sum and the amount used.
+You can view the utility bill information for the last month, and also remove or change it. With the app, you can view the full history for each utility in two formats: 
+1. Text view
+   The same information that can be viewed for the last month on the main tab, but you can view it for each month of the selected year, along with the final expenses for the year.
+2. Chart view
+   Information about expenses for each month is shown on the bar chart. You can tap on the bar of the desired month to view extended information.
+Last but not least, you can compare the expenses of two desired years for individual utilities. This functionality is available only in the Char view format. Additionally, while comparing two years, it's possible to see the comparison of the final expenses of these years on the pie chart.
 
 ## Get started
 
