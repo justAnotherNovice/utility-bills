@@ -19,7 +19,7 @@ function HistoryBarChart({ history, averageSum, ...rest }: Props) {
     if (rest.selectedYears.length === 2) {
       return getBarChartToCompare(
         history[rest.selectedYears[0]],
-        history[rest.selectedYears[1]]
+        history[rest.selectedYears[1]],
       );
     }
     return formatDataAsBarChart(history[rest.selectedYears[0]]);
@@ -60,10 +60,11 @@ function HistoryBarChart({ history, averageSum, ...rest }: Props) {
         xAxisThickness={0}
         spacing={25}
         xAxisLabelsVerticalShift={2}
+        yAxisLabelWidth={40}
         showReferenceLine1
         referenceLine1Position={averageSum}
         height={160}
-        width={390}
+        width={380}
         onPress={(item: any) => selectMonth(item)}
       />
     </View>

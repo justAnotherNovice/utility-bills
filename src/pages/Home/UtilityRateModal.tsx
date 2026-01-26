@@ -16,10 +16,10 @@ function UtilityRateModal({ lastBill, ...rest }: Props) {
   let [rate, setRate] = useState("");
   const updateLastBills = useStore(({ updateLastBills }) => updateLastBills);
 
-  function saveRateValue() {
+  async function saveRateValue() {
     let decimalRate = parseFloat(rate);
     if (decimalRate) {
-      updateLastBills(rest.currentTabIndex, { rate: decimalRate });
+      await updateLastBills(rest.currentTabIndex, { rate: decimalRate });
       rest.closeModal();
     }
   }

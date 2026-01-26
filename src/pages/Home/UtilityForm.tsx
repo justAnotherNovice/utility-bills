@@ -25,7 +25,6 @@ function UtilityForm({ bill, activeTab, cancelForm, ...rest }: Props) {
   let [current, setCurrent] = useState(rest.currentValue.toString());
   let [billData, setBillData] = useState(initExpenses());
   const updateLastBills = useStore(({ updateLastBills }) => updateLastBills);
-  const saveLastBills = useStore(({ saveLastBills }) => saveLastBills);
   let [message, setMessage] = useState({ isVisible: false, text: "" });
 
   function initExpenses() {
@@ -71,8 +70,7 @@ function UtilityForm({ bill, activeTab, cancelForm, ...rest }: Props) {
           date: getDateWithTime(),
         },
       };
-      updateLastBills(activeTab, resultData);
-      await saveLastBills();
+      await updateLastBills(activeTab, resultData);
       await rest.saveBill(resultData.info);
       cancelForm(false);
     } else setMessage({ isVisible: true, text: "Сума повинна бути більше 0" });

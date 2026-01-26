@@ -19,8 +19,7 @@ type StoreState = {
     };
   };
   getLastBills: () => Promise<void>;
-  updateLastBills: (tabIndex: number, billData: any) => void;
-  saveLastBills: () => Promise<void>;
+  updateLastBills: (tabIndex: number, billData: any) => Promise<void>;
   saveBill: (tabIndex: number, bill: any) => Promise<void>;
   getHistory: (tabIndex: number) => Promise<void>;
   deleteLastBill: (tabIndex: number) => Promise<void>;
@@ -34,26 +33,21 @@ const useStore = create<StoreState>((set, get) => ({
   getLastBills: async () => {
     set({ lastBills: await getData("lastBills", "{}") });
   },
-  updateLastBills: (tabIndex, billData) => {
+  updateLastBills: async (tabIndex, billData) => {
     const current: any = get().lastBills;
     set({
       lastBills: {
         ...current,
         [tabIndex]: { ...current[tabIndex], ...billData },
       },
+      isUpdating: true,
     });
-  },
-  saveLastBills: async () => {
-    await saveData("lastBills", get().lastBills);
-    set({ isUpdating: true });
+    await saveData("lastBills", current);
   },
   saveBill: async (tabIndex, bill) => {
-    let key = tabIndex.toString();
-    let year = new Date().getFullYear();
-    let utilityData = await getData(key, "{}");
-    let currentYearBills: any[] = utilityData[year] ?? [];
-    currentYearBills.push(bill);
-    await saveData(key, { ...utilityData, [year]: currentYearBills });
+    await performAction(tabIndex, (yearBills: any[]) =>
+      addBill(yearBills, bill),
+    );
   },
   getHistory: async (tabIndex) => {
     let history = await getData(tabIndex.toString(), "{}");
@@ -63,27 +57,42 @@ const useStore = create<StoreState>((set, get) => ({
     });
   },
   deleteLastBill: async (tabIndex) => {
-    let history = await getData(tabIndex.toString(), "{}");
-    let currentYear = new Date().getFullYear();
-    let yearBills: any[] = history[currentYear];
-    yearBills.pop();
-    let newLastBill = yearBills[yearBills.length - 1];
+    let newLastBill = await performAction(tabIndex, deleteLastBill);
     get().updateLastBills(tabIndex, { info: newLastBill });
-    await saveData(tabIndex.toString(), {
-      ...history,
-      [currentYear]: yearBills,
-    });
-    await get().saveLastBills();
+    set({ isUpdating: true });
   },
   updateLastBill: async (tabIndex, bill) => {
-    let key = tabIndex.toString();
-    let year = new Date().getFullYear();
-    let utilityData = await getData(key, "{}");
-    let currentYearBills: any[] = utilityData[year] ?? [];
-    currentYearBills[currentYearBills.length - 1] = bill;
-    await saveData(key, { ...utilityData, [year]: currentYearBills });
+    await performAction(tabIndex, (yearBills: any[]) =>
+      updateLastBill(yearBills, bill),
+    );
     set({ isUpdating: true });
   },
 }));
+
+async function performAction(tabIndex: number, handler: any) {
+  let key = tabIndex.toString();
+  let year = new Date().getFullYear();
+  let utilityData = await getData(key, "{}");
+  let currentYearBills = utilityData[year] ?? [];
+  let bill = handler(currentYearBills);
+  await saveData(key, { ...utilityData, [year]: currentYearBills });
+  return bill;
+}
+
+function deleteLastBill(yearBills: any[]) {
+  yearBills.pop();
+  let newLastBill = yearBills[yearBills.length - 1];
+  return newLastBill;
+}
+
+function addBill(yearBills: any[], bill: any) {
+  yearBills.push(bill);
+  return bill;
+}
+
+function updateLastBill(yearBills: any[], bill: any) {
+  yearBills[yearBills.length - 1] = bill;
+  return bill;
+}
 
 export default useStore;
