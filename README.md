@@ -1,15 +1,13 @@
 # utility-bills
 
-This is a simple app to keep track of your utility bills' history. Using this application, you can add utility indicators for the current month for each utility to view the final sum and the amount used.
-You can view the utility bill information for the last month, and also remove or change it. With the app, you can view the full history for each utility in two formats: 
-1. Text view
+This is a simple app to keep track of your utility bills. What can this application do:
+- calculates utility expenses with provided indicators and tariff.
+- shows the last month's bill information.
+- changes or removes the last month's bill information.
+- shows utility history in text and chart form.
+- compares years' expenses.
 
-   The same information that can be viewed for the last month on the main tab, but you can view it for each month of the selected year, along with the final expenses for the year.
-2. Chart view
-
-   Information about expenses for each month is shown on the bar chart. You can tap on the bar of the desired month to view extended information.
-
-Last but not least, you can compare the expenses of two desired years for individual utilities. This functionality is available only in the Char view format. Additionally, while comparing two years, it's possible to see the comparison of the final expenses of these years on the pie chart.
+To know more about this application in detail and to see the appearance of the UI, head to the [Usage examples](#usage-examples) section.
 
 ## Installation
 
@@ -22,6 +20,7 @@ Last but not least, you can compare the expenses of two desired years for indivi
 2. Install dependencies
 
    ```bash
+   cd utility-bills
    npm install
    ```
 3. Run the app
@@ -37,17 +36,36 @@ If you want to create an actual installation file for either Android or IOS, fol
 
 ## Usage examples
 
+### Home tab
+In the GIF below, you can see how the indicators for the chosen utility are being set on the home tab of the app. After setting indicators, you can view the last month's bill information. You can also change or remove the last month's bill information. When changing, it is possible to change only the current indicator
 
+It's important to note that before trying to set indicators, you should set the tariff rate for the utility in the settings on the home tab.
+
+<img src="demos/home-tab.gif" width="300px" height="650px">
+
+### Text view format
+In the GIF below, you can see the data about utility bills for all months in the year represented in text form. There are also expenses for the whole year.
+
+<img src="demos/text-view.gif" width="300px" height="650px">
+
+### Chart view format
+In the GIF below, you can see the expenses for utility bills for all months in the year represented in chart form. By selecting two years, you can compare expenses for these years. When comparing, the overall expenses of the years can be viewed as a pie chart. 
+
+<img src="demos/text-view.gif" width="300px" height="650px">
 
 ## Future features
 
-Except for improving overall design of the UI and adding dynamic to it I want to add such functionality:
-- adding address information to be able to save and view utility bills history for different addresses.
+Except for improving the overall design of the UI and adding dynamics to it, I want to add such functionality:
+- adding address information to be able to save and view the utility bills' history for different addresses.
 - maybe to add the ability to actually pay for utilities through Liqpay service.
 
-## Used tecnologies
+## Used technologies
 
 - [Expo platform](https://github.com/expo/expo)
 - [React native framework](https://github.com/facebook/react-native)
-- [React native gifted charts](https://github.com/Abhinandan-Kushwaha/react-native-gifted-charts)
 - [TypeScript](https://github.com/microsoft/TypeScript)
+- [React native gifted charts](https://github.com/Abhinandan-Kushwaha/react-native-gifted-charts)
+- [Zustand](https://github.com/pmndrs/zustand)
+
+## Contribute
+If you are interested or bored, feel free to contribute if you have found a bug or have suggestions for improvements. 
