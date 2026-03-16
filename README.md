@@ -51,7 +51,7 @@ In the GIF below, you can see the data about utility bills for all months in the
 ### Chart view format
 In the GIF below, you can see the expenses for utility bills for all months in the year represented in chart form. By selecting two years, you can compare expenses for these years. When comparing, the overall expenses of the years can be viewed as a pie chart. 
 
-<img src="demos/text-view.gif" width="300px" height="650px">
+<img src="demos/chart-view.gif" width="300px" height="650px">
 
 ## Future features
 
